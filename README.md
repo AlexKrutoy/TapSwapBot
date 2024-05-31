@@ -58,24 +58,28 @@
 ## Установка
 Вы можете скачать [**Репозиторий**](https://github.com/shamhi/TapSwapBot) клонированием на вашу систему и установкой необходимых зависимостей:
 ```shell
-~ >>> git clone https://github.com/shamhi/TapSwapBot.git 
-~ >>> cd TapSwapBot
+git clone https://github.com/shamhi/TapSwapBot.git 
+cd TapSwapBot
+```
 
 # Linux
-~/TapSwapBot >>> python3 -m venv venv
-~/TapSwapBot >>> source venv/bin/activate
-~/TapSwapBot >>> pip3 install -r requirements.txt
-~/TapSwapBot >>> cp .env-example .env
-~/TapSwapBot >>> nano .env  # Здесь вы обязательно должны указать ваши API_ID и API_HASH , остальное берется по умолчанию
-~/TapSwapBot >>> python3 main.py
+```shell
+python3 -m venv venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+cp .env-example .env
+nano .env  # Здесь вы обязательно должны указать ваши API_ID и API_HASH , остальное берется по умолчанию
+python3 main.py
+```
 
 # Windows
-~/TapSwapBot >>> python -m venv venv
-~/TapSwapBot >>> venv\Scripts\activate
-~/TapSwapBot >>> pip install -r requirements.txt
-~/TapSwapBot >>> copy .env-example .env
-~/TapSwapBot >>> # Указываете ваши API_ID и API_HASH, остальное берется по умолчанию
-~/TapSwapBot >>> python main.py
+```shell
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+copy .env-example .env
+# Указываете ваши API_ID и API_HASH, остальное берется по умолчанию
+python main.py
 ```
 
 Также для быстрого запуска вы можете использовать аргументы, например:
