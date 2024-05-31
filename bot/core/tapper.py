@@ -15,6 +15,7 @@ from bot.config import settings
 from bot.utils import logger
 from bot.exceptions import InvalidSession
 from .headers import headers
+from bot.utils.scripts import extract_chq
 
 
 class Tapper:
@@ -95,6 +96,16 @@ class Tapper:
             response.raise_for_status()
 
             response_json = await response.json()
+            chq = response_json.get('chq')
+            if chq:
+                chq_result = extract_chq(chq=chq)
+
+                response = await http_client.post(url='https://api.tapswap.ai/api/account/login',
+                                                  json={"chr": chq_result, "init_data": tg_web_data, "referrer": ""})
+                response_text = await response.text()
+                response.raise_for_status()
+
+                response_json = await response.json()
             access_token = response_json['access_token']
             profile_data = response_json
 
