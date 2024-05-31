@@ -58,7 +58,7 @@
 ## Установка
 Вы можете скачать [**Репозиторий**](https://github.com/shamhi/TapSwapBot) клонированием на вашу систему и установкой необходимых зависимостей:
 ```shell
-git clone https://github.com/shamhi/TapSwapBot.git 
+git clone https://github.com/AlexKrutoy/TapSwapBot.git
 cd TapSwapBot
 ```
 
@@ -84,13 +84,12 @@ python main.py
 
 Также для быстрого запуска вы можете использовать аргументы, например:
 ```shell
-~/TapSwapBot >>> python3 main.py --action (1/2/3)
+~/TapSwapBot >>> python3 main.py --action (1/2)
 # Или
-~/TapSwapBot >>> python3 main.py -a (1/2/3)
+~/TapSwapBot >>> python3 main.py -a (1/2)
 
-# 1 - Создает сессию
-# 2 - Запускает кликер
-# 3 - Запуск через Telegram
+# 1 - Запуакает кликер
+# 2 - Создает сессию
 ```
 
 
