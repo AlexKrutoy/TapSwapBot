@@ -1,10 +1,13 @@
 [![Join our Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/hidden_coding)
 
-Спасибо за идею:
-[<img src="https://img.shields.io/badge/Telegram-%40shamhi-orange">](https://t.me/sho6ot)
+![image psd(13)](https://github.com/AlexKrutoy/TapSwapBot/assets/73156836/db444c1d-f3ba-47cb-bea7-e8b85f7cd03d)
 
 
 ![img1](.github/images/demo.png)
+
+## Recommendation before usage
+
+# 🔥🔥 use PYTHON 3.10 🔥🔥
 
 > 🇪🇳 README in english available [here](README-EN.md)
 
@@ -45,7 +48,7 @@
 
 ## Предварительные условия
 Прежде чем начать, убедитесь, что у вас установлено следующее:
-- [Python](https://www.python.org/downloads/) версии 3.10 или 3.11.
+- [Python](https://www.python.org/downloads/) **версии 3.10 **
 
 ## Получение API ключей
 1. Перейдите на сайт [my.telegram.org](https://my.telegram.org) и войдите в систему, используя свой номер телефона.
@@ -85,6 +88,11 @@
 # 2 - Запускает кликер
 # 3 - Запуск через Telegram
 ```
+
+
+Спасибо за идею:
+[<img src="https://img.shields.io/badge/Telegram-%40shamhi-orange">](https://t.me/sho6ot)
+
 
 
 ### Контакты
