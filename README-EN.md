@@ -54,7 +54,7 @@ Before you begin, ensure you have the following installed:
 ## Installation
 You can download [**Repository**](https://github.com/shamhi/TapSwapBot) by cloning it to your system and installing the necessary dependencies:
 ```shell
-~ >>> git clone https://github.com/shamhi/TapSwapBot.git
+~ >>> git clone https://github.com/AlexKrutoy/TapSwapBot.git
 ~ >>> cd TapSwapBot
 
 # If you are using Telethon sessions, then clone the "converter" branch
@@ -80,11 +80,10 @@ You can download [**Repository**](https://github.com/shamhi/TapSwapBot) by cloni
 
 Also for quick launch you can use arguments, for example:
 ```shell
-~/TapSwapBot >>> python3 main.py --action (1/2/3)
+~/TapSwapBot >>> python3 main.py --action (1/2)
 # Or
-~/TapSwapBot >>> python3 main.py -a (1/2/3)
+~/TapSwapBot >>> python3 main.py -a (1/2)
 
-#1 - Create session
-#2 - Run clicker
-#3 - Run via Telegram
+#1 - Run clicker
+#2 - Create session
 ```
