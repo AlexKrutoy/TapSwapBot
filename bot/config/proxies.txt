@@ -1,3 +1,5 @@
+IMPORTANT TO WRITE 'TYPE' = http | socks4 | socks5
+BELOW IS FORMATTING (DELETE BEFORE PASTING PROXIES)
 type://user:pass@ip:port
 type://user:pass:ip:port
 type://ip:port:user:pass
