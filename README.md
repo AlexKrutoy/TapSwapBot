@@ -22,7 +22,7 @@
 | Поддержка tdata / pyrogram .session / telethon .session        |        ✅        |
 
 
-## [Настройки](https://github.com/shamhi/TapSwapBot/blob/main/.env-example)
+## [Настройки](https://github.com/AlexKrutoy/TapSwapBot/blob/main/.env-example)
 | Настройка                | Описание                                                                                    |
 |--------------------------|---------------------------------------------------------------------------------------------|
 | **API_ID / API_HASH**    | Данные платформы, с которой запускать сессию Telegram (сток - Android)                      |
