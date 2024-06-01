@@ -56,7 +56,7 @@
 3. Запишите `API_ID` и `API_HASH` в файле `.env`, предоставленные после регистрации вашего приложения.
 
 ## Установка
-Вы можете скачать [**Репозиторий**](https://github.com/shamhi/TapSwapBot) клонированием на вашу систему и установкой необходимых зависимостей:
+Вы можете скачать [**Репозиторий**](https://github.com/AlexKrutoy/TapSwapBot) клонированием на вашу систему и установкой необходимых зависимостей:
 ```shell
 git clone https://github.com/AlexKrutoy/TapSwapBot.git
 cd TapSwapBot
