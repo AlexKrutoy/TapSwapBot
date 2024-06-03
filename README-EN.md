@@ -19,7 +19,7 @@ Thanks for idea:
 | Support tdata / pyrogram .session / telethon .session          |     ✅     |
 
 ## [Settings](https://github.com/shamhi/TapSwapBot/blob/main/.env-example)
-| Настройка                | Описание                                                                               |
+| Feature                | Description                                                                               |
 |--------------------------|----------------------------------------------------------------------------------------|
 | **API_ID / API_HASH**    | Platform data from which to launch a Telegram session (stock - Android)                |
 | **MIN_AVAILABLE_ENERGY** | Minimum amount of available energy, upon reaching which                                |
