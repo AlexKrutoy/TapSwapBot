@@ -354,6 +354,8 @@ class Tapper:
 
                         if available_energy < available_energy_rand:
                             await http_client.close()
+                            if proxy_conn:
+                                proxy_conn.close()
 
                             random_sleep = randint(settings.SLEEP_BY_MIN_ENERGY[0], settings.SLEEP_BY_MIN_ENERGY[1])
 
@@ -363,6 +365,7 @@ class Tapper:
                             await asyncio.sleep(delay=random_sleep)
 
                             http_client = CloudflareScraper(headers=headers, connector=proxy_conn)
+                            proxy_conn = ProxyConnector().from_url(proxy) if proxy else None
 
                             access_token_created_time = 0
 
