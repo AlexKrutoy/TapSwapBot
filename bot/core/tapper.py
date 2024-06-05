@@ -15,7 +15,7 @@ from bot.config import settings
 from bot.utils import logger
 from bot.exceptions import InvalidSession
 from .headers import headers
-from bot.utils.scripts import extract_chq
+from bot.utils.scripts import extract_chq, escape_html
 
 
 class Tapper:
@@ -89,6 +89,7 @@ class Tapper:
             await asyncio.sleep(delay=3)
 
     async def login(self, http_client: aiohttp.ClientSession, tg_web_data: str) -> tuple[dict[str], str]:
+        response_text = ''
         try:
             response = await http_client.post(url='https://api.tapswap.ai/api/account/login',
                                               json={"init_data": tg_web_data, "referrer": ""})
@@ -112,10 +113,11 @@ class Tapper:
             return profile_data, access_token
         except Exception as error:
             logger.error(f"{self.session_name} | Unknown error while getting Access Token: {error} | "
-                         f"Response text: {response_text}")
+                         f"Response text: {escape_html(response_text)[:128]}...")
             await asyncio.sleep(delay=3)
 
     async def apply_boost(self, http_client: aiohttp.ClientSession, boost_type: str) -> bool:
+        response_text = ''
         try:
             response = await http_client.post(url='https://api.tapswap.ai/api/player/apply_boost',
                                               json={'type': boost_type})
@@ -125,12 +127,13 @@ class Tapper:
             return True
         except Exception as error:
             logger.error(f"{self.session_name} | Unknown error when Apply {boost_type} Boost: {error} | "
-                         f"Response text: {response_text}")
+                        f"Response text: {escape_html(response_text)[:128]}...")
             await asyncio.sleep(delay=3)
 
             return False
 
     async def upgrade_boost(self, http_client: aiohttp.ClientSession, boost_type: str) -> bool:
+        response_text = ''
         try:
             response = await http_client.post(url='https://api.tapswap.ai/api/player/upgrade',
                                               json={'type': boost_type})
@@ -140,12 +143,13 @@ class Tapper:
             return True
         except Exception as error:
             logger.error(f"{self.session_name} | Unknown error when Upgrade {boost_type} Boost: {error} | "
-                         f"Response text: {response_text}")
+                         f"Response text: {escape_html(response_text)[:128]}...")
             await asyncio.sleep(delay=3)
 
             return False
 
     async def claim_reward(self, http_client: aiohttp.ClientSession, task_id: str) -> bool:
+        response_text = ''
         try:
             response = await http_client.post(url='https://api.tapswap.ai/api/player/claim_reward',
                                               json={'task_id': task_id})
@@ -155,12 +159,13 @@ class Tapper:
             return True
         except Exception as error:
             logger.error(f"{self.session_name} | Unknown error when Claim {task_id} Reward: {error} | "
-                         f"Response text: {response_text}")
+                         f"Response text: {escape_html(response_text)[:128]}...")
             await asyncio.sleep(delay=3)
 
             return False
 
     async def send_taps(self, http_client: aiohttp.ClientSession, taps: int) -> dict[str]:
+        response_text = ''
         try:
             timestamp = int(time() * 1000)
             content_id = int((timestamp * self.user_id * self.user_id / self.user_id) % self.user_id % self.user_id)
@@ -178,7 +183,7 @@ class Tapper:
             return player_data
         except Exception as error:
             logger.error(f"{self.session_name} | Unknown error when Tapping: {error} | "
-                         f"Response text: {response_text}")
+                         f"Response text: {escape_html(response_text)[:128]}...")
             await asyncio.sleep(delay=3)
 
     async def check_proxy(self, http_client: aiohttp.ClientSession, proxy: Proxy) -> None:
@@ -189,14 +194,15 @@ class Tapper:
         except Exception as error:
             logger.error(f"{self.session_name} | Proxy: {proxy} | Error: {error}")
 
-    async def run(self, proxy: str | None) -> None:
-        access_token_created_time = 0
-        turbo_time = 0
-        active_turbo = False
+        async def run(self, proxy: str | None) -> None:
+            access_token_created_time = 0
+            turbo_time = 0
+            active_turbo = False
 
-        proxy_conn = ProxyConnector().from_url(proxy) if proxy else None
+            proxy_conn = ProxyConnector().from_url(proxy) if proxy else None
 
-        async with CloudflareScraper(headers=headers, connector=proxy_conn) as http_client:
+            http_client = CloudflareScraper(headers=headers, connector=proxy_conn)
+
             if proxy:
                 await self.check_proxy(http_client=http_client, proxy=proxy)
 
@@ -218,7 +224,7 @@ class Tapper:
                         if tap_bot:
                             bot_earned = profile_data['bot_shares']
 
-                            logger.success(f"{self.session_name} | Tap bot earned +{bot_earned} coins!")
+                            logger.success(f"{self.session_name} | Tap bot earned +{bot_earned:,} coins!")
 
                         balance = profile_data['player']['shares']
 
@@ -268,10 +274,11 @@ class Tapper:
                     next_charge_level = player_data['charge_level'] + 1
 
                     logger.success(f"{self.session_name} | Successful tapped! | "
-                                   f"Balance: <c>{balance}</c> (<g>+{calc_taps}</g>) | Total: <e>{total}</e>")
+                                   f"Balance: <c>{balance:,}</c> (<g>+{calc_taps:,}</g>) | Total: <e>{total:,}</e>")
 
                     if active_turbo is False:
-                        available_energy_rand = randint(a=settings.MIN_AVAILABLE_ENERGY[0], b=settings.MIN_AVAILABLE_ENERGY[1])
+                        available_energy_rand = randint(a=settings.MIN_AVAILABLE_ENERGY[0],
+                                                        b=settings.MIN_AVAILABLE_ENERGY[1])
                         if (energy_boost_count > 0
                                 and available_energy < available_energy_rand
                                 and settings.APPLY_DAILY_ENERGY is True):
@@ -344,15 +351,20 @@ class Tapper:
                                 await asyncio.sleep(delay=1)
 
                             continue
-                            
+
                         if available_energy < available_energy_rand:
+                            await http_client.close()
+
+                            random_sleep = randint(settings.SLEEP_BY_MIN_ENERGY[0], settings.SLEEP_BY_MIN_ENERGY[1])
+
                             logger.info(f"{self.session_name} | Minimum energy reached: {available_energy}")
-                            sleep_rand = randint(a=settings.SLEEP_BY_MIN_ENERGY[0], b=settings.SLEEP_BY_MIN_ENERGY[1])
-                            logger.info(f"{self.session_name} | Sleep {sleep_rand}s")
+                            logger.info(f"{self.session_name} | Sleep {random_sleep:,}s")
 
-                            await asyncio.sleep(delay=sleep_rand)
+                            await asyncio.sleep(delay=random_sleep)
 
-                            continue
+                            http_client = CloudflareScraper(headers=headers, connector=proxy_conn)
+
+                            access_token_created_time = 0
 
                 except InvalidSession as error:
                     raise error
@@ -370,9 +382,8 @@ class Tapper:
                     logger.info(f"Sleep {sleep_between_clicks}s")
                     await asyncio.sleep(delay=sleep_between_clicks)
 
-
-async def run_tapper(tg_client: Client, proxy: str | None):
-    try:
-        await Tapper(tg_client=tg_client).run(proxy=proxy)
-    except InvalidSession:
-        logger.error(f"{tg_client.name} | Invalid Session")
+    async def run_tapper(tg_client: Client, proxy: str | None):
+        try:
+            await Tapper(tg_client=tg_client).run(proxy=proxy)
+        except InvalidSession:
+            logger.error(f"{tg_client.name} | Invalid Session")
