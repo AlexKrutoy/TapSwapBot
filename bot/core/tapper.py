@@ -98,10 +98,10 @@ class Tapper:
 
             response_json = await response.json()
             wait_s = response_json.get('wait_s')
-           if wait_s:
-               logger.error(f"{self.session_name} | App overloaded, waiting for: {wait_s}")
-               await asyncio.sleep(delay=wait_s)
-               return self.login(http_client, tg_web_data)
+            if wait_s:
+                logger.error(f"{self.session_name} | App overloaded, waiting for: {wait_s}")
+                await asyncio.sleep(delay=wait_s)
+                return self.login(http_client, tg_web_data)
                
             chq = response_json.get('chq')
             if chq:
