@@ -66,6 +66,8 @@ async def stop_tasks(client: Client = None) -> None:
         except:
             ...
 
+def escape_html(text: str) -> str:
+    return text.replace('<', '\\<').replace('>', '\\>')
 
 def extract_chq(chq: str) -> int:
     chq_length = len(chq)
