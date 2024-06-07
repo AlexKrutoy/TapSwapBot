@@ -370,8 +370,8 @@ class Tapper:
 
                         await asyncio.sleep(delay=random_sleep)
 
-                        http_client = CloudflareScraper(headers=headers, connector=proxy_conn)
                         proxy_conn = ProxyConnector().from_url(proxy) if proxy else None
+                        http_client = CloudflareScraper(headers=headers, connector=proxy_conn)
 
                         access_token_created_time = 0
 
