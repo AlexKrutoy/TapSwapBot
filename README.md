@@ -1,4 +1,6 @@
-[![Join our Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/hidden_coding)
+[![Static Badge](https://img.shields.io/badge/Telegram-Channel-Link?style=for-the-badge&logo=Telegram&logoColor=white&logoSize=auto&color=blue)](https://t.me/hidden_coding)
+
+[![Static Badge](https://img.shields.io/badge/Telegram-Chat-yes?style=for-the-badge&logo=Telegram&logoColor=white&logoSize=auto&color=blue)](https://t.me/hidden_codding_chat)
 
 ![image psd(13)](https://github.com/AlexKrutoy/TapSwapBot/assets/73156836/db444c1d-f3ba-47cb-bea7-e8b85f7cd03d)
 
@@ -35,7 +37,7 @@
 | **AUTO_UPGRADE_ENERGY**  | Улучшать ли энергию (True / False)                                                          |
 | **MAX_ENERGY_LEVEL**     | Максимальный уровень прокачки энергии (до 20)                                               |
 | **AUTO_UPGRADE_CHARGE**  | Улучшать ли заряд энергии (True / False)                                                    |
-| **MAX_CHARGE_LEVEL**     | Максимальный уровень прокачки заряда энергии (до 5)                                         |
+| **MAX_CHARGE_LEVEL**     | Максимальный уровень прокачки заряда энергии (до 4)                                         |
 | **APPLY_DAILY_ENERGY**   | Использовать ли ежедневный бесплатный буст энергии (True / False)                           |
 | **APPLY_DAILY_TURBO**    | Использовать ли ежедневный бесплатный буст турбо (True / False)                             |
 | **RANDOM_CLICKS_COUNT**  | Рандомное количество тапов (напр. [50,200])                                                 |
