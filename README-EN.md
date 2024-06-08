@@ -1,4 +1,6 @@
-[![Join our Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/hidden_coding)
+[![Static Badge](https://img.shields.io/badge/Telegram-Channel-Link?style=for-the-badge&logo=Telegram&logoColor=white&logoSize=auto&color=blue)](https://t.me/hidden_coding)
+
+[![Static Badge](https://img.shields.io/badge/Telegram-Chat-yes?style=for-the-badge&logo=Telegram&logoColor=white&logoSize=auto&color=blue)](https://t.me/hidden_codding_chat)
 
 Thanks for idea:
 [<img src="https://img.shields.io/badge/Telegram-%40shamhi-orange">](https://t.me/sho6ot)
@@ -31,7 +33,7 @@ Thanks for idea:
 | **AUTO_UPGRADE_ENERGY**  | Should I improve the energy (True / False)                                             |
 | **MAX_ENERGY_LEVEL**     | Maximum level of energy pumping (up to 20)                                             |
 | **AUTO_UPGRADE_CHARGE**  | Should I improve the charge (True / False)                                             |
-| **MAX_CHARGE_LEVEL**     | Maximum level of charge pumping (up to 5)                                              |
+| **MAX_CHARGE_LEVEL**     | Maximum level of charge pumping (up to 4)                                              |
 | **APPLY_DAILY_ENERGY**   | Whether to use the daily free energy boost (True / False)                              |
 | **APPLY_DAILY_TURBO**    | Whether to use the daily free turbo boost (True / False)                               |
 | **RANDOM_CLICKS_COUNT**  | Random number of taps (eg [50,200])                                                    |
