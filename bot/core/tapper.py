@@ -216,6 +216,14 @@ class Tapper:
 
         while True:
             try:
+                if http_client.closed:
+                    if proxy_conn:
+                        if not proxy_conn.closed:
+                            proxy_conn.close()
+
+                    proxy_conn = ProxyConnector().from_url(proxy) if proxy else None
+                    http_client = aiohttp.ClientSession(headers=headers, connector=proxy_conn)
+
                 if time() - access_token_created_time >= 1800:
                     profile_data, access_token = await self.login(http_client=http_client, tg_web_data=tg_web_data)
 
@@ -361,7 +369,8 @@ class Tapper:
                     if available_energy < available_energy_rand:
                         await http_client.close()
                         if proxy_conn:
-                            proxy_conn.close()
+                            if not proxy_conn.closed:
+                                proxy_conn.close()
 
                         random_sleep = randint(settings.SLEEP_BY_MIN_ENERGY[0], settings.SLEEP_BY_MIN_ENERGY[1])
 
@@ -369,9 +378,6 @@ class Tapper:
                         logger.info(f"{self.session_name} | Sleep {random_sleep:,}s")
 
                         await asyncio.sleep(delay=random_sleep)
-
-                        proxy_conn = ProxyConnector().from_url(proxy) if proxy else None
-                        http_client = CloudflareScraper(headers=headers, connector=proxy_conn)
 
                         access_token_created_time = 0
 
