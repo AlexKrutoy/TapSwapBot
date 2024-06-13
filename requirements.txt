@@ -23,3 +23,5 @@ TgCrypto==1.2.5
 typing_extensions==4.11.0
 win32-setctime==1.1.0
 yarl==1.9.4
+selenium==4.21.0
+webdriver-manager==4.0.1
