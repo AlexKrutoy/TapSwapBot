@@ -6,14 +6,12 @@ from pyrogram import Client
 from pyrogram.types import Message
 
 from bot.utils.emojis import num, StaticEmoji
+from bot.utils import logger
 from bs4 import BeautifulSoup
 
 import pathlib
 import shutil
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service as FirefoxService
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from webdriver_manager.firefox import GeckoDriverManager
 
 
 if os.name == "posix":
