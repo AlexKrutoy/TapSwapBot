@@ -1,6 +1,7 @@
 import asyncio
 from time import time
 from random import randint
+import traceback
 from urllib.parse import unquote
 
 import aiohttp
@@ -13,9 +14,9 @@ from pyrogram.raw.functions.messages import RequestWebView
 
 from bot.config import settings
 from bot.utils import logger
+from bot.utils.scripts import extract_chq, escape_html
 from bot.exceptions import InvalidSession
 from .headers import headers
-from bot.utils.scripts import extract_chq, escape_html
 
 
 class Tapper:
@@ -111,8 +112,7 @@ class Tapper:
                     chq_result = extract_chq(chq=chq)
 
                     response = await http_client.post(url='https://api.tapswap.ai/api/account/login',
-                                                      json={"chr": chq_result, "init_data": tg_web_data,
-                                                            "referrer": ""})
+                                                    json={"chr": chq_result, "init_data": tg_web_data, "referrer": ""})
                     response_text = await response.text()
                     response.raise_for_status()
 
@@ -122,8 +122,9 @@ class Tapper:
 
             return profile_data, access_token
         except Exception as error:
+            traceback.print_exc()
             logger.error(f"{self.session_name} | Unknown error while getting Access Token: {error} | "
-                         f"Response text: {escape_html(response_text)[:128]}...")
+                         f"Response text: {escape_html(response_text)}...")
             await asyncio.sleep(delay=3)
 
     async def apply_boost(self, http_client: aiohttp.ClientSession, boost_type: str) -> bool:
@@ -137,7 +138,7 @@ class Tapper:
             return True
         except Exception as error:
             logger.error(f"{self.session_name} | Unknown error when Apply {boost_type} Boost: {error} | "
-                        f"Response text: {escape_html(response_text)[:128]}...")
+                         f"Response text: {escape_html(response_text)[:128]}...")
             await asyncio.sleep(delay=3)
 
             return False
@@ -370,7 +371,7 @@ class Tapper:
 
                         continue
 
-                    if available_energy < available_energy_rand:
+                    if available_energy < settings.MIN_AVAILABLE_ENERGY:
                         await http_client.close()
                         if proxy_conn:
                             if not proxy_conn.closed:
@@ -398,7 +399,7 @@ class Tapper:
                 if active_turbo is True:
                     sleep_between_clicks = 4
 
-                logger.info(f"{self.session_name} | Sleep {sleep_between_clicks}s")
+                logger.info(f"Sleep {sleep_between_clicks}s")
                 await asyncio.sleep(delay=sleep_between_clicks)
 
 

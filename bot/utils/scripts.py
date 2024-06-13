@@ -1,3 +1,4 @@
+import os
 import asyncio
 from typing import Union
 
@@ -5,14 +6,40 @@ from pyrogram import Client
 from pyrogram.types import Message
 
 from bot.utils.emojis import num, StaticEmoji
+from bot.utils import logger
 from bs4 import BeautifulSoup
 
 import pathlib
 import shutil
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.options import Options as ChromeOptions
-from webdriver_manager.chrome import ChromeDriverManager
+
+
+if os.name == "posix":
+    from selenium.webdriver.firefox.service import Service as FirefoxService
+    from selenium.webdriver.firefox.options import Options as FirefoxOptions
+    from webdriver_manager.firefox import GeckoDriverManager
+
+    web_options = FirefoxOptions
+    web_service = FirefoxService
+    web_manager = GeckoDriverManager
+else:
+    from selenium.webdriver.chrome.service import Service as ChromeService
+    from selenium.webdriver.chrome.options import Options as ChromeOptions
+    from webdriver_manager.chrome import ChromeDriverManager
+
+    web_options = ChromeOptions
+    web_service = ChromeService
+    web_manager = ChromeDriverManager
+
+
+if not pathlib.Path("webdriver").exists():
+    logger.info("Downloading webdriver. It may take some time...")
+    pathlib.Path("webdriver").mkdir(parents=True)
+    webdriver_path = pathlib.Path(web_manager().install())
+    shutil.move(webdriver_path, f"webdriver/{webdriver_path.name}")
+    logger.info("Webdriver downloaded successfully")
+
+webdriver_path = next(pathlib.Path("webdriver").iterdir()).as_posix()
 
 
 def get_command_args(
@@ -76,13 +103,11 @@ async def stop_tasks(client: Client = None) -> None:
 def escape_html(text: str) -> str:
     return text.replace('<', '\\<').replace('>', '\\>')
 
+
 def extract_chq(chq: str) -> int:
-    if not pathlib.Path("webdriver").exists():
-        pathlib.Path("webdriver").mkdir(parents=True)
-        webdriver_path = pathlib.Path(ChromeDriverManager().install())
-        shutil.move(webdriver_path, f"webdriver/{webdriver_path.name}")
-    else:
-        webdriver_path = next(pathlib.Path("webdriver").iterdir()).as_posix()
+    options = web_options()
+    options.add_argument("--headless")
+    driver = webdriver.Firefox(service=web_service(webdriver_path), options=options)
 
     chq_length = len(chq)
 
@@ -95,21 +120,17 @@ def extract_chq(chq: str) -> int:
     xor_bytes = bytearray(t ^ xor_key for t in bytes_array)
     decoded_xor = xor_bytes.decode('utf-8')
 
-    options = ChromeOptions()
-    options.add_argument("--headless")
-    driver = webdriver.Chrome(service=ChromeService(webdriver_path), options=options)
-
     driver.execute_script("""
         var chrStub = document.createElement("div");
         chrStub.id = "_chr_";
         document.body.appendChild(chrStub);
     """)
 
-    fixed_xor = repr(decoded_xor).replace("", "\\")
+    fixed_xor = repr(decoded_xor).replace("`", "\\`")
 
     k = driver.execute_script(f"""
         try {{
-            return eval({fixed_xor[1:-1]});
+            return eval(`{fixed_xor[1:-1]}`);
         }} catch (e) {{
             return e;
         }}
@@ -118,3 +139,4 @@ def extract_chq(chq: str) -> int:
     driver.quit()
 
     return k
+
