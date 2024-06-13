@@ -21,9 +21,8 @@ start_text = """
 
 Select an action:
 
-    1. Create session
-    2. Run clicker
-    3. Run via Telegram (Beta)
+    1. Run clicker
+    2. Create session
 """
 
 global tg_clients
@@ -88,24 +87,18 @@ async def process() -> None:
 
             if not action.isdigit():
                 logger.warning("Action must be number")
-            elif action not in ["1", "2", "3"]:
-                logger.warning("Action must be 1, 2 or 3")
+            elif action not in ["1", "2"]:
+                logger.warning("Action must be 1 or 2")
             else:
                 action = int(action)
                 break
 
-    if action == 1:
+    if action == 2:
         await register_sessions()
-    elif action == 2:
+    elif action == 1:
         tg_clients = await get_tg_clients()
 
         await run_tasks(tg_clients=tg_clients)
-    elif action == 3:
-        tg_clients = await get_tg_clients()
-
-        logger.info("Send /help command in Saved Messages\n")
-
-        await compose(tg_clients)
 
 
 async def run_tasks(tg_clients: list[Client]):
