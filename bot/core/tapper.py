@@ -19,10 +19,11 @@ from bot.utils.scripts import extract_chq, escape_html
 
 
 class Tapper:
-    def __init__(self, tg_client: Client):
+    def __init__(self, tg_client: Client, lock: asyncio.Lock):
         self.session_name = tg_client.name
         self.tg_client = tg_client
         self.user_id = 0
+        self.lock = lock
 
     async def get_tg_web_data(self, proxy: str | None) -> str:
         if proxy:
@@ -102,15 +103,18 @@ class Tapper:
                 logger.error(f"{self.session_name} | App overloaded, waiting for: {wait_s}")
                 await asyncio.sleep(delay=wait_s)
                 return self.login(http_client, tg_web_data)
-               
-            chq = response_json.get('chq')
-            if chq:
-                chq_result = extract_chq(chq=chq)
 
-                response = await http_client.post(url='https://api.tapswap.ai/api/account/login',
-                                                  json={"chr": chq_result, "init_data": tg_web_data, "referrer": ""})
-                response_text = await response.text()
-                response.raise_for_status()
+            chq = response_json.get('chq')
+
+            if chq:
+                async with self.lock:
+                    chq_result = extract_chq(chq=chq)
+
+                    response = await http_client.post(url='https://api.tapswap.ai/api/account/login',
+                                                      json={"chr": chq_result, "init_data": tg_web_data,
+                                                            "referrer": ""})
+                    response_text = await response.text()
+                    response.raise_for_status()
 
                 response_json = await response.json()
             access_token = response_json['access_token']
