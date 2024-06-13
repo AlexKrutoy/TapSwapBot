@@ -371,7 +371,7 @@ class Tapper:
 
                         continue
 
-                    if available_energy < available_energy_rand
+                    if available_energy < available_energy_rand:
                         await http_client.close()
                         if proxy_conn:
                             if not proxy_conn.closed:
