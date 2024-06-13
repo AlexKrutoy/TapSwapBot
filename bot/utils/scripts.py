@@ -92,7 +92,7 @@ async def stop_tasks(client: Client = None) -> None:
         all_tasks = asyncio.all_tasks(loop=loop)
 
     clicker_tasks = [task for task in all_tasks
-                     if isinstance(task, asyncio.Task) and task._coro.name == 'run_tapper']
+                     if isinstance(task, asyncio.Task) and task._coro.__name__ == 'run_tapper']
 
     for task in clicker_tasks:
         try:
@@ -126,11 +126,11 @@ def extract_chq(chq: str) -> int:
         document.body.appendChild(chrStub);
     """)
 
-    fixed_xor = repr(decoded_xor).replace("", "\\")
+    fixed_xor = repr(decoded_xor).replace("`", "\\`")
 
     k = driver.execute_script(f"""
         try {{
-            return eval({fixed_xor[1:-1]});
+            return eval(`{fixed_xor[1:-1]}`);
         }} catch (e) {{
             return e;
         }}
@@ -139,3 +139,4 @@ def extract_chq(chq: str) -> int:
     driver.quit()
 
     return k
+

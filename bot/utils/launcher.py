@@ -101,6 +101,7 @@ async def process() -> None:
         await run_tasks(tg_clients=tg_clients)
 
 
+
 async def run_tasks(tg_clients: list[Client]):
     proxies = get_proxies()
     proxies_cycle = cycle(proxies) if proxies else None
