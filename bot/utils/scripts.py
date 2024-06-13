@@ -6,12 +6,14 @@ from pyrogram import Client
 from pyrogram.types import Message
 
 from bot.utils.emojis import num, StaticEmoji
-from bot.utils import logger
 from bs4 import BeautifulSoup
 
 import pathlib
 import shutil
 from selenium import webdriver
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from webdriver_manager.firefox import GeckoDriverManager
 
 
 if os.name == "posix":
@@ -33,11 +35,9 @@ else:
 
 
 if not pathlib.Path("webdriver").exists():
-    logger.info("Downloading webdriver. It may take some time...")
     pathlib.Path("webdriver").mkdir(parents=True)
     webdriver_path = pathlib.Path(web_manager().install())
     shutil.move(webdriver_path, f"webdriver/{webdriver_path.name}")
-    logger.info("Webdriver downloaded successfully")
 
 webdriver_path = next(pathlib.Path("webdriver").iterdir()).as_posix()
 
@@ -92,7 +92,7 @@ async def stop_tasks(client: Client = None) -> None:
         all_tasks = asyncio.all_tasks(loop=loop)
 
     clicker_tasks = [task for task in all_tasks
-                     if isinstance(task, asyncio.Task) and task._coro.__name__ == 'run_tapper']
+                     if isinstance(task, asyncio.Task) and task._coro.name == 'run_tapper']
 
     for task in clicker_tasks:
         try:
@@ -126,11 +126,11 @@ def extract_chq(chq: str) -> int:
         document.body.appendChild(chrStub);
     """)
 
-    fixed_xor = repr(decoded_xor).replace("`", "\\`")
+    fixed_xor = repr(decoded_xor).replace("", "\\")
 
     k = driver.execute_script(f"""
         try {{
-            return eval(`{fixed_xor[1:-1]}`);
+            return eval({fixed_xor[1:-1]});
         }} catch (e) {{
             return e;
         }}
@@ -139,4 +139,3 @@ def extract_chq(chq: str) -> int:
     driver.quit()
 
     return k
-
