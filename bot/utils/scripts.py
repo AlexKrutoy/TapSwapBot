@@ -1,3 +1,4 @@
+import glob
 import os
 import asyncio
 from typing import Union
@@ -12,6 +13,19 @@ from bs4 import BeautifulSoup
 import pathlib
 import shutil
 from selenium import webdriver
+from multiprocessing import Queue
+
+
+
+def get_session_names() -> list[str]:
+    session_names = glob.glob("sessions/*.session")
+    session_names = [
+        os.path.splitext(os.path.basename(file))[0] for file in session_names
+    ]
+
+    return session_names
+
+
 
 
 if os.name == "posix":
@@ -44,7 +58,9 @@ webdriver_path = next(pathlib.Path("webdriver").iterdir()).as_posix()
 
 options = web_options()
 options.add_argument("--headless")
-driver = web_driver(service=web_service(webdriver_path), options=options)
+driver = None
+
+session_queue = Queue()
 
 
 def get_command_args(
@@ -110,6 +126,11 @@ def escape_html(text: str) -> str:
 
 
 def extract_chq(chq: str) -> int:
+    global driver
+
+    if driver is None:
+        driver = web_driver(service=web_service(webdriver_path), options=options)
+
     chq_length = len(chq)
 
     bytes_array = bytearray(chq_length // 2)
@@ -137,5 +158,14 @@ def extract_chq(chq: str) -> int:
         }}
     """)
 
-    return k
+    session_queue.put(1)
 
+    if len(get_session_names()) == session_queue.qsize():
+        logger.info("All sessions are closed. Quitting driver...")
+        driver.quit()
+        driver = None
+
+        while session_queue.qsize() > 0:
+            session_queue.get()
+
+    return k
