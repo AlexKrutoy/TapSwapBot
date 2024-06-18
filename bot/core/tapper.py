@@ -96,7 +96,7 @@ class Tapper:
             response = await http_client.post(url='https://api.tapswap.ai/api/account/login',
                                               json={"init_data": tg_web_data, "referrer": ""})
             response_text = await response.text()
-            response.raise_for_status()
+            #response.raise_for_status()
 
             response_json = await response.json()
             wait_s = response_json.get('wait_s')
@@ -114,7 +114,7 @@ class Tapper:
                     response = await http_client.post(url='https://api.tapswap.ai/api/account/login',
                                                     json={"chr": chq_result, "init_data": tg_web_data, "referrer": ""})
                     response_text = await response.text()
-                    response.raise_for_status()
+                    #response.raise_for_status()
 
                 response_json = await response.json()
             access_token = response_json['access_token']
